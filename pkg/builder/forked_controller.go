@@ -343,10 +343,6 @@ func (blder *TypedBuilder[request]) project(proj objectProjection) func(cluster.
 func (blder *TypedBuilder[request]) doWatch() error {
 	// Reconcile type
 	if blder.forInput.object != nil {
-		if reflect.TypeFor[request]() != reflect.TypeOf(mcreconcile.Request{}) {
-			return fmt.Errorf("For() can only be used with mcreconcile.Request, got %T", *new(request))
-		}
-
 		var hdler mchandler.TypedEventHandlerFunc[client.Object, request]
 		reflect.ValueOf(&hdler).Elem().Set(reflect.ValueOf(mchandler.WithLowPriorityWhenUnchanged(mchandler.EnqueueRequestForObject)))
 
